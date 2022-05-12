@@ -1,0 +1,312 @@
+## Scenario 1: clone, edit, add , commit and push
+
+>> git clone https://github.com/shubham103/DewTrainingDay-1.git
+>> cd DewTrainingDay-1
+>> git status
+>> vim hello.txt
+>> git status
+>> git add hello.txt
+>> git status
+>> git commit -m "another update on 12th may"
+>> git status
+>> git push
+
+
+
+######################################################################################################
+
+
+## Scenario 2: create a file, add to staging and again take the file from staging to working directory
+               - "suppose you want the changes but dont want to add to this commit"
+
+>> git clone https://github.com/shubham103/DewTrainingDay-1.git
+>> cd DewTrainingDay-1
+>> git status
+>> vim hello.txt
+>> git status
+>> git add hello.txt
+>> git status
+>> git restore --staged hello.txt
+>> git status
+
+
+######################################################################################################
+
+
+## Scenario 3: take file from local repo(latest commit) to working dir.
+
+>> git clone https://github.com/shubham103/DewTrainingDay-1.git
+>> cd DewTrainingDay-1
+>> git status
+>> vim hello.txt
+>> git status
+>> git restore hello.txt // if we give . instead of file name, whole directory will restore and become like lastest commit
+
+######################################################################################################
+
+## Scenario 4: how to see the changes we made before commit, using "git diff"
+
+>> git clone https://github.com/shubham103/DewTrainingDay-1.git
+>> cd DewTrainingDay-1
+>> vim hello.txt
+>> git status
+>> git add hello.txt
+>> git status
+>> git diff              // to see the changes between working dir and lastest commit
+>> git add hello.txt
+>> git status
+>> git diff --cached     // to see the changes between stage dir and latest commit
+
+
+######################################################################################################
+
+## Scenario 5: git pull
+
+>> git clone https://github.com/shubham103/DewTrainingDay-1.git
+>> cd DewTrainingDay-1
+>> git status
+ ++  in github create a file in the repo.. 
+
+>> git log
+>> git pull --rebase
+>> git log             // you will see the new commit  
+>> ls                  // you will see the new file you created on github
+
+
+######################################################################################################
+
+## Scenario 6: Create a branch, make a commit and merge that to master
+
+>> git clone https://github.com/shubham103/DewTrainingDay-1.git
+>> cd DewTrainingDay-1
+>> git status
+>> git branch  					// to show list of branches 
+>> git branch  testing     		// create a new branch, you can give any name inplace of testing
+>> git branch
+>> git checkout testing  		// switch to testing branch
+>> git branch
+>> vimm hello.txt 
+>> git add . 
+>> git commit -m "file edited in testing branch"
+>> cat hello.txt
+>> git log
+>> git checkout main
+>> git log                        // here you will not see the commit we made above, becoz it's on tesing branch
+>> cat hello.txt
+>> git merge testing
+>> git log
+>> cat hello.txt
+
+
+######################################################################################################
+
+## Scenario 7:  Merge conflict
+       - 'Here we will see one case of merge conflict and how to resolve them'
+
+>> git clone https://github.com/shubham103/DewTrainingDay-1.git
+>> cd DewTrainingDay-1
+
+>> git branch  					// to show list of branches 
+>> git branch  testing     		// create a new branch, you can give any name inplace of testing
+>> git branch
+
+>> vim hello.txt				// add a line "line added in main branch"
+>> git add .
+>> git commit -m "line added in main branch for merge conflict"
+>> git status
+>> git log
+
+
+>> git checkout testing  		// switch to testing branch
+>> git branch
+
+>> vim hello.txt				// add a line "line added in testing branch"
+>> git add .
+>> git commit -m "line added in testing branch for merge conflict"
+>> git status
+>> git log 
+
+
+>> git checkout main
+>> git log
+>> git merge testing				// this will show a merge conflict message 
+
+>> git status					// show the file in red having merge conflict
+
+>> vim hello.txt  
+
+			// open the file and find sections like below
+
+			'''
+			<<<<<<< HEAD
+			adding line testing branch but will commit in main brnac
+
+
+			line added in main branch for merge conflict
+			=======
+			line added in testing brnahc for merge conflict
+			>>>>>>> testing
+
+			'''
+			// now we have to decide which code we have to take.. remove every thing and keep only the line you want to keep
+
+			'''
+			adding line testing branch but will commit in main brnac
+			'''
+
+			// the file should not contain any  <<<<< HEAD, ==== and >>>>> testing 
+
+			// save and close the file
+
+>> git add .
+>> git merge --continue
+>> git log
+
+
+######################################################################################################
+
+## Scenario 7:  how to create tag
+
+
+>> git clone https://github.com/shubham103/DewTrainingDay-1.git
+>> cd DewTrainingDay-1
+>> git status
+>> vim hello.txt
+>> git status
+>> git add hello.txt
+>> git status
+>> git commit -m "commit for creating tag"
+>> git log
+>> git tag 'v1.4'
+>> git log   			// see the diffence this time
+
+// if we do the git push after this , tag can be seen in github also
+ 
+
+######################################################################################################
+
+## Scenario 8: Cherry pick
+
+>> git clone https://github.com/shubham103/DewTrainingDay-1.git
+>> cd DewTrainingDay-1
+>> git status
+>> git branch testing
+>> git checkout testing
+
+>> vim file2     		// add a line "file 2 in testing branch"
+>> git add .
+>> git commit -m "file 2 in testing"
+>> git log
+
+>> vim file3     		// add a line "file 3 in testing branch"
+>> git add .
+>> git commit -m "file 3 in testing"
+>> git log
+
+>> vim file4     		// add a line "file 4 in testing branch"
+>> git add .
+>> git commit -m "file 4 in testing"
+>> git log
+
+// now you will get  different commit id ... for every file
+// now we will go in our main branch and try to take one of the commits
+
+>> git checkout main
+>> ls
+>> git log
+>> git cherry-pick <commit-id-hash>
+
+>> ls
+>> git log 
+
+
+######################################################################################################
+
+
+## Scenario 9: Squash commit
+
+============================================= TYPE 1
+
+>> git clone https://github.com/shubham103/DewTrainingDay-1.git
+>> cd DewTrainingDay-1
+>> git status
+
+>> vim file2     		// add a line "file 2 created"
+>> git add .
+>> git commit -m "file 2"
+>> git log
+
+>> vim file3     		// add a line "file 3 created"
+>> git add .
+>> git commit -m "file 3"
+>> git log
+
+>> vim file4     		// add a line "file 4 created"
+>> git add .
+>> git commit -m "file 4 "
+>> git log
+
+// now lets reduce the number of commits we have created using squash commit
+
+>> git rebase -i HEAD~4               // here 4 denotes the number how commits we wants to reduce from top 
+
+// it will open a editor and ask you to choose one as pick and make other as squash after that save and close
+// it will open another editor and ask you for the commit msg edit it , save and close
+
+>> git log
+
+============================================ TYPE 2
+
+>> git clone https://github.com/shubham103/DewTrainingDay-1.git
+>> cd DewTrainingDay-1
+>> git status
+>> git branch testing
+>> git checkout testing
+
+>> vim file2     		// add a line "file 2 in testing branch"
+>> git add .
+>> git commit -m "file 2 in testing"
+>> git log
+
+>> vim file3     		// add a line "file 3 in testing branch"
+>> git add .
+>> git commit -m "file 3 in testing"
+>> git log
+
+>> vim file4     		// add a line "file 4 in testing branch"
+>> git add .
+>> git commit -m "file 4 in testing"
+>> git log
+
+>> git checkout main
+>> ls
+>> git log
+>> git merge --suqash testing
+
+// if we merge without --squash it take all the commits from testing bransh but with squash, it copied the changes to latest commit of main branch. 
+
+>> ls
+>> git log 
+
+######################################################################################################
+
+## Scenario 10: using "git stash command"
+
+>> git clone https://github.com/shubham103/DewTrainingDay-1.git
+>> cd DewTrainingDay-1
+>> git status
+>> vim hello.txt  			// edit something 
+>> git status
+>> git diff
+
+// now we will try to save this chane in stash stack
+
+>> git stash -u  			// -u is for taking untracked files also
+>> git status
+>> cat hello.txt 			// the changes you made will not be there
+
+// now lets bring our changes back
+
+>> git stash apply
+>> git status
+>> cat hello.txt			// now you will see your changes. 
